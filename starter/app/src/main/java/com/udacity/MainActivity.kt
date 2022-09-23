@@ -41,12 +41,11 @@ class MainActivity : AppCompatActivity() {
         custom_button.setOnClickListener {
             download()
         }
+
+        sendNotification()
+
     }
 
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        return super.onCreateView(name, context, attrs)
-        sendNotification()
-    }
     private fun createChannel(channelId: String, channelName: String) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
