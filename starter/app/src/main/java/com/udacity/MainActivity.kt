@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        displayNotification()
+        sendNotification()
 
     }
 
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun displayNotification() {
+    private fun sendNotification() {
         val notificationManager = ContextCompat.getSystemService(
             application,
             NotificationManager::class.java
@@ -82,6 +82,8 @@ class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            sendNotification()
+
         }
     }
 
