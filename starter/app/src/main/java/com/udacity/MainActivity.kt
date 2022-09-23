@@ -12,6 +12,8 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.AttributeSet
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -41,12 +43,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
+        return super.onCreateView(name, context, attrs)
         sendNotification()
-
     }
-
     private fun createChannel(channelId: String, channelName: String) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -63,7 +63,9 @@ class MainActivity : AppCompatActivity() {
             val notificationManager = getSystemService(
                 NotificationManager::class.java
             )
+
             notificationManager.createNotificationChannel(notificationChannel)
+            //notificationManager.cancelNotifications()
 
         }
     }
@@ -73,6 +75,8 @@ class MainActivity : AppCompatActivity() {
             application,
             NotificationManager::class.java
         ) as NotificationManager
+
+
         notificationManager.sendNotification(
             getString(R.string.notification_description),
             application

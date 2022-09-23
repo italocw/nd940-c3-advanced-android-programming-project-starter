@@ -23,12 +23,18 @@ val contentIntent = Intent(applicationContext, MainActivity::class.java)
     val builder = NotificationCompat.Builder(
         applicationContext,
         applicationContext.getString(R.string.notification_channel_id)
-    )  .setSmallIcon(R.drawable.ic_launcher_foreground)
+    )  .setSmallIcon(R.drawable.ic_assistant_black_24dp)
         .setContentTitle(applicationContext
             .getString(R.string.notification_title))
         .setContentText(messageBody)
         .setContentIntent(contentPendingIntent)
         .setAutoCancel(true)
         .setOnlyAlertOnce(true)
+
     notify(NOTIFICATION_ID, builder.build())
+
+}
+
+fun NotificationManager.cancelNotifications() {
+    cancelAll()
 }
