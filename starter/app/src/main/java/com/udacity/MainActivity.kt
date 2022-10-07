@@ -1,5 +1,6 @@
 package com.udacity
 
+import android.animation.ObjectAnimator
 import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -91,6 +92,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun download() {
+        animateButton()
         val request =
             DownloadManager.Request(Uri.parse(URL))
                 .setTitle(getString(R.string.app_name))
@@ -102,6 +104,14 @@ class MainActivity : AppCompatActivity() {
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadID =
             downloadManager.enqueue(request)// enqueue puts the download request in the queue.
+    }
+
+    private fun animateButton() {
+        rotateInnerCircle()
+    }
+
+    private fun rotateInnerCircle() {
+    ///    val animator = ObjectAnimator.ofFloat(view, View.ROTATION, -360F, 0F)
     }
 
     companion object {
