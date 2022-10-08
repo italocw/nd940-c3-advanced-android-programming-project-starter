@@ -15,6 +15,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var notificationManager: NotificationManager
     private lateinit var pendingIntent: PendingIntent
     private lateinit var action: NotificationCompat.Action
-
+    private lateinit var radioGroup: RadioGroup
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -43,8 +45,16 @@ class MainActivity : AppCompatActivity() {
             download()
         }
 
+        radioGroup = findViewById(R.id.repository_radio_group)
         sendNotification()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!radioGroup.isSelected) {
+         //   Toast.makeText(this, getString(R.string.select_the_file_text), Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun createChannel(channelId: String, channelName: String) {
@@ -111,7 +121,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun rotateInnerCircle() {
-    ///    val animator = ObjectAnimator.ofFloat(view, View.ROTATION, -360F, 0F)
+        ///    val animator = ObjectAnimator.ofFloat(view, View.ROTATION, -360F, 0F)
     }
 
     companion object {
