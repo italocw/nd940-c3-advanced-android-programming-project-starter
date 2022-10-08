@@ -12,7 +12,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         if (!radioGroup.isSelected) {
             loadingButton.state = ButtonState.Loading
-            Toast.makeText(this, getString(R.string.select_the_file_text), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.select_the_file_file_name), Toast.LENGTH_LONG).show()
         }
     }
 
