@@ -25,7 +25,7 @@ class DetailActivity : AppCompatActivity() {
         fileStatus.text = getString(intent.extras!!.getInt(FILE_STATUS))
 
         okButton.setOnClickListener { onBackPressed() }
-        setSupportActionBar(toolbar)
+        setSupportActionBar(this.actionBar.toolbar)
     }
 
 

@@ -99,6 +99,8 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             loadingButton.state = ButtonState.Completed
+
+
             sendNotification()
 
         }
