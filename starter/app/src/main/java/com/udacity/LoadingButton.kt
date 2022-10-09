@@ -38,7 +38,7 @@ class LoadingButton @JvmOverloads constructor(
                     // Redraw the layout to use the new updated value of [progress].
                     invalidate()
 
-                    if (!progressIsNotCompleted() && new == ButtonState.Loading) {
+                    if (!progressIsNotCompleted() && state==ButtonState.Loading) {
                         state = ButtonState.Completed
                     }
                 }
@@ -92,7 +92,7 @@ class LoadingButton @JvmOverloads constructor(
         super.onDraw(canvas)
         loadingBackground(canvas)
 
-        if (state == ButtonState.Loading) {
+        if (state != ButtonState.Completed) {
             drawLoadingInnerBar(canvas)
             drawLoadingCircle(canvas)
         }
@@ -129,7 +129,7 @@ class LoadingButton @JvmOverloads constructor(
 
         paint.color = context.getColor(R.color.white)
 
-        val label = if (state == ButtonState.Loading) {
+        val label = if (state != ButtonState.Completed) {
             resources.getString(R.string.we_are_loading)
         } else {
             resources.getString(R.string.download)

@@ -21,10 +21,10 @@ class DetailActivity : AppCompatActivity() {
         val fileStatus = findViewById<TextView>(R.id.file_status_text)
         val okButton = findViewById<Button>(R.id.ok_button)
 
-      //  fileName.text = savedInstanceState!!.getString(FILE_NAME)
-        //fileStatus.text = getString(savedInstanceState!!.getInt(FILE_STATUS))
+        fileName.text = intent.extras!!.getString(FILE_NAME)
+        fileStatus.text = getString(intent.extras!!.getInt(FILE_STATUS))
 
-        okButton.setOnClickListener { onNavigateUp() }
+        okButton.setOnClickListener { onBackPressed() }
         setSupportActionBar(toolbar)
     }
 

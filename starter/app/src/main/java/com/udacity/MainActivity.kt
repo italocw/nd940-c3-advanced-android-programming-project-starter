@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!radioGroup.isSelected) {
+        if (radioGroup.checkedRadioButtonId==-1) {
             loadingButton.state = ButtonState.Loading
             Toast.makeText(this, getString(R.string.select_the_file_file_name), Toast.LENGTH_LONG).show()
         }
@@ -105,7 +105,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun download(url: String) {
-        animateButton()
+        loadingButton.state = ButtonState.Clicked
+
         val request =
             DownloadManager.Request(Uri.parse(url))
                 .setTitle(getString(R.string.app_name))
@@ -118,10 +119,6 @@ class MainActivity : AppCompatActivity() {
         downloadID =
             downloadManager.enqueue(request)
         // enqueue puts the download request in the queue.
-    }
-
-    private fun animateButton() {
-        loadingButton.state = ButtonState.Loading
     }
 
 

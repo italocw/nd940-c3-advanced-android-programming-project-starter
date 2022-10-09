@@ -23,8 +23,8 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
             applicationContext
                 .getString(R.string.notification_title)
         )
-        .setContentText(messageBody)
         .setContentIntent(actionButtonPendingIntent)
+        .setContentText(messageBody)
         .setAutoCancel(true)
         .setOnlyAlertOnce(true)
         .addAction(
@@ -46,13 +46,13 @@ private fun openActivityPendingIntent(
 
    bundle.putString(DetailActivity.FILE_NAME, "TESTE")
   bundle.putInt(DetailActivity.FILE_STATUS, R.string.fail)
-
+intent.putExtras(bundle)
 
     return PendingIntent.getActivity(
         applicationContext,
         NOTIFICATION_ID,
         intent,
-        PendingIntent.FLAG_UPDATE_CURRENT, bundle
+        PendingIntent.FLAG_UPDATE_CURRENT
     )
 }
 
