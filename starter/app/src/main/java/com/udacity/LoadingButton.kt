@@ -28,37 +28,40 @@ class LoadingButton @JvmOverloads constructor(
     private var valueAnimator = ValueAnimator()
 
     public var state: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
-        when (new) {
-            ButtonState.Loading -> {
-                valueAnimator = ValueAnimator.ofInt(0, 360).setDuration(5000).apply {
-                    // Add an update listener to update [progress] value.
-                    addUpdateListener {
-                        // Update the current progress to use it [onDraw].
-                        progress = it.animatedValue as Int
-                        // Redraw the layout to use the new updated value of [progress].
-                        invalidate()
 
-                        if (!progressIsNotCompleted()) {
-                            state = ButtonState.Completed
-                        }
+        if (new != ButtonState.Completed) {
+            valueAnimator = ValueAnimator.ofInt(0, 360).setDuration(5000).apply {
+                // Add an update listener to update [progress] value.
+                addUpdateListener {
+                    // Update the current progress to use it [onDraw].
+                    progress = it.animatedValue as Int
+                    // Redraw the layout to use the new updated value of [progress].
+                    invalidate()
+
+                    if (!progressIsNotCompleted() && new == ButtonState.Loading) {
+                        state = ButtonState.Completed
                     }
-
-                    // Repeat the animation infinitely.
-                    //     repeatCount = ValueAnimator.INFINITE
-                    repeatMode = ValueAnimator.RESTART
-                    // Start the animation.
-                    start()
                 }
 
+                // Repeat the animation infinitely.
+                if (new == ButtonState.Clicked) {
+                    repeatCount = ValueAnimator.INFINITE
+                }
+                repeatMode = ValueAnimator.RESTART
+                // Start the animation.
+                start()
             }
-            ButtonState.Completed -> {
-                valueAnimator.cancel()
 
+        }
+        if (new == ButtonState.Completed) {
+            valueAnimator.currentPlayTime
+            valueAnimator.cancel()
+            invalidate()
 
-            }
         }
 
     }
+
 
     init {
         isClickable = true
