@@ -18,14 +18,14 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
 
         val fileName = findViewById<TextView>(R.id.file_name_text)
-        val fileStatus = findViewById<TextView>(R.id.file_status_text)
+        val fileStatus = findViewById<StatusTextView>(R.id.file_status_text)
         val okButton = findViewById<Button>(R.id.ok_button)
 
         fileName.text = intent.extras!!.getString(FILE_NAME)
-        fileStatus.text = getString(intent.extras!!.getInt(FILE_STATUS))
+        fileStatus.status = intent.extras!!.getInt(FILE_STATUS)
 
         okButton.setOnClickListener { onBackPressed() }
-        setSupportActionBar(this.actionBar.toolbar)
+        setSupportActionBar(toolbar)
     }
 
 

@@ -25,14 +25,12 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/gray" />
 
-            <com.udacity.StatusTextView
+            <TextView
                 android:id="@+id/file_name_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                app:failColor="@color/red"
-                app:successColor="@color/colorPrimaryDark"
-                android:gravity="start"
+                  android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorPrimaryDark"
                 tools:text="@string/load_app_file_name" />
@@ -53,7 +51,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/gray" />
 
-            <TextView
+            <com.udacity.StatusTextView
                 android:id="@+id/file_status_text"
 
                 android:layout_width="match_parent"
@@ -61,6 +59,8 @@
                 android:layout_weight="0.5"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:failColor="@color/red"
+                app:successColor="@color/colorPrimaryDark"
 
                 tools:text="Fail" />
         </LinearLayout>
