@@ -25,6 +25,12 @@ class DetailActivity : AppCompatActivity() {
         fileName.text = intent.extras!!.getString(FILE_NAME)
         fileStatus.status = intent.extras!!.getInt(FILE_STATUS)
 
+        setMotionLayoutTransitionEndListener()
+
+        setSupportActionBar(toolbar)
+    }
+
+    private fun setMotionLayoutTransitionEndListener() {
         val motionLayout = findViewById<MotionLayout>(R.id.content_detail_motion_layout)
 
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
@@ -44,8 +50,6 @@ class DetailActivity : AppCompatActivity() {
 
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
         })
-
-        setSupportActionBar(toolbar)
     }
 
 }

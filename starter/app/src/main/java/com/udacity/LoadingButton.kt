@@ -27,30 +27,10 @@ class LoadingButton @JvmOverloads constructor(
 
     private var valueAnimator = ValueAnimator()
 
-    public var state: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
+    var state: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
 
         if (new != ButtonState.Completed) {
-            valueAnimator = ValueAnimator.ofInt(0, 360).setDuration(5000).apply {
-                // Add an update listener to update [progress] value.
-                addUpdateListener {
-                    // Update the current progress to use it [onDraw].
-                    progress = it.animatedValue as Int
-                    // Redraw the layout to use the new updated value of [progress].
-                    invalidate()
-
-                    if (!progressIsNotCompleted() && state == ButtonState.Loading) {
-                        state = ButtonState.Completed
-                    }
-                }
-
-                // Repeat the animation infinitely.
-                if (new == ButtonState.Clicked) {
-                    repeatCount = ValueAnimator.INFINITE
-                }
-                repeatMode = ValueAnimator.RESTART
-                // Start the animation.
-                start()
-            }
+            updateAnimation(new)
 
         }
         if (new == ButtonState.Completed) {
@@ -59,7 +39,26 @@ class LoadingButton @JvmOverloads constructor(
             invalidate()
 
         }
+    }
 
+    private fun updateAnimation(new: ButtonState) {
+        valueAnimator = ValueAnimator.ofInt(0, 360).setDuration(5000).apply {
+            addUpdateListener {
+                progress = it.animatedValue as Int
+                if (!progressIsNotCompleted() && state == ButtonState.Loading) {
+                    state = ButtonState.Completed
+                } else {
+                    invalidate()
+                }
+            }
+
+            if (new == ButtonState.Clicked) {
+                repeatCount = ValueAnimator.INFINITE
+            }
+            repeatMode = ValueAnimator.RESTART
+
+            start()
+        }
     }
 
 
