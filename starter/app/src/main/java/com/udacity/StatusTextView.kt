@@ -13,13 +13,12 @@ class StatusTextView @JvmOverloads constructor(
      var status: Int = 0
         set(value) {
             field = value
-            if (status == DownloadManager.STATUS_SUCCESSFUL) {
+            text = if (status == DownloadManager.STATUS_SUCCESSFUL) {
                 setTextColor(successColor)
-                text = context.getString(R.string.success)
+                context.getString(R.string.success)
             } else {
                 setTextColor(failColor)
-                text = context.getString(R.string.fail)
-
+                context.getString(R.string.fail)
             }
         }
 

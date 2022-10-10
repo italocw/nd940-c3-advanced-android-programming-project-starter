@@ -38,7 +38,7 @@ class LoadingButton @JvmOverloads constructor(
                     // Redraw the layout to use the new updated value of [progress].
                     invalidate()
 
-                    if (!progressIsNotCompleted() && state==ButtonState.Loading) {
+                    if (!progressIsNotCompleted() && state == ButtonState.Loading) {
                         state = ButtonState.Completed
                     }
                 }
@@ -66,6 +66,7 @@ class LoadingButton @JvmOverloads constructor(
     init {
         isClickable = true
     }
+
 
     private var widthSize = 0
     private var heightSize = 0

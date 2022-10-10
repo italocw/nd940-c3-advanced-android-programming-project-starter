@@ -27,9 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     private var downloadID: Long = 0
     private lateinit var loadingButton: LoadingButton
-    private lateinit var notificationManager: NotificationManager
-    private lateinit var pendingIntent: PendingIntent
-    private lateinit var action: NotificationCompat.Action
     private lateinit var radioGroup: RadioGroup
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
-        createChannel(CHANNEL_ID, "NOTIFICAÇÃO")
+        createChannel(CHANNEL_ID, "DOWNLOADS")
 
         radioGroup = findViewById(R.id.repository_radio_group)
 
@@ -80,7 +77,6 @@ class MainActivity : AppCompatActivity() {
             )
 
             notificationManager.createNotificationChannel(notificationChannel)
-            //notificationManager.cancelNotifications()
 
         }
     }
@@ -99,7 +95,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val receiver = object : BroadcastReceiver() {
-        @SuppressLint("Range")
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             loadingButton.state = ButtonState.Completed
@@ -112,13 +107,9 @@ class MainActivity : AppCompatActivity() {
                     val cursor: Cursor = manager.query(query)
                     if (cursor.moveToFirst()) {
                         if (cursor.count > 0) {
-                //            val status =                                cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                  //          val title =                                cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE))
-
-                            sendNotification(
+                               sendNotification(
                                 cursor
                             )
-
                         }
                     }
                 }
