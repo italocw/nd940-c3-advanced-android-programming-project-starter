@@ -1,5 +1,6 @@
 package com.udacity
 
+import android.app.NotificationManager
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -25,9 +26,15 @@ class DetailActivity : AppCompatActivity() {
         fileName.text = intent.extras!!.getString(FILE_NAME)
         fileStatus.status = intent.extras!!.getInt(FILE_STATUS)
 
-        setMotionLayoutTransitionEndListener()
+        cancelNotifications()
 
+        setMotionLayoutTransitionEndListener()
         setSupportActionBar(toolbar)
+    }
+
+    private fun cancelNotifications() {
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.cancel(NOTIFICATION_ID)
     }
 
     private fun setMotionLayoutTransitionEndListener() {
