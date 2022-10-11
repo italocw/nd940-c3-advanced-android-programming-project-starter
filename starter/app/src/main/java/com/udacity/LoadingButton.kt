@@ -3,14 +3,24 @@ package com.udacity
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
 
 class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+
+
+    private var animationDuration: Long=0
+    private var textColor: Int = 0
+    private var progressBarColor: Int = 0
+    private var progressCircleColor: Int = 0
+    private lateinit var loadingText: String
+    private lateinit var loadCompleteText: String
 
     private var radius = 0.0f
     private val loadingRect = Rect()
@@ -27,6 +37,19 @@ class LoadingButton @JvmOverloads constructor(
 
     private var valueAnimator = ValueAnimator()
 
+    init {
+        isClickable = true
+
+        context.withStyledAttributes(attrs, R.styleable.LoadingButton) {
+            textColor = getColor(R.styleable.LoadingButton_textColor, 0)
+            progressBarColor = getColor(R.styleable.LoadingButton_loadingBarColor, 0)
+            progressCircleColor = getColor(R.styleable.LoadingButton_progressCircleColor, 0)
+            animationDuration = getInteger(R.styleable.LoadingButton_animationDuration, 3000).toLong()
+            loadingText = getString(R.styleable.LoadingButton_loadingText)!!
+            loadCompleteText = getString(R.styleable.LoadingButton_loadCompleteText)!!
+        }
+    }
+
     var state: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
 
         if (new != ButtonState.Completed) {
@@ -42,7 +65,7 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun updateAnimation(new: ButtonState) {
-        valueAnimator = ValueAnimator.ofInt(0, 360).setDuration(5000).apply {
+        valueAnimator = ValueAnimator.ofInt(0, 360).setDuration(animationDuration).apply {
             addUpdateListener {
                 progress = it.animatedValue as Int
                 if (!progressIsNotCompleted() && state == ButtonState.Loading) {
@@ -61,18 +84,11 @@ class LoadingButton @JvmOverloads constructor(
         }
     }
 
-
-    init {
-        isClickable = true
-    }
-
-
     private var widthSize = 0
     private var heightSize = 0
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         radius = ((Integer.min(width, height)) / 2.0 * 0.8).toFloat()
-
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -103,19 +119,22 @@ class LoadingButton @JvmOverloads constructor(
     private fun progressIsNotCompleted(): Boolean = progress < 360
 
     private fun loadingBackground(canvas: Canvas) {
-        paint.color = context.getColor(R.color.colorPrimary)
+        if (background is ColorDrawable){
+            paint.color = (background as ColorDrawable).color
+        }
+
         fullRect.set(0f, 0f, width.toFloat(), height.toFloat())
         canvas.drawRect(fullRect, paint)
     }
 
     private fun drawLoadingInnerBar(canvas: Canvas) {
         loadingRect.set(0, 0, width * progress / 360, height)
-        paint.color = context.getColor(R.color.colorPrimaryDark)
+        paint.color = progressBarColor
         canvas.drawRect(loadingRect, paint)
     }
 
     private fun drawLoadingCircle(canvas: Canvas) {
-        paint.color = context.getColor(R.color.colorAccent)
+        paint.color = progressCircleColor
         rectOfArc.set(
             width - height.toFloat() / 1.25f,
             height.toFloat() / 4f,
@@ -127,13 +146,14 @@ class LoadingButton @JvmOverloads constructor(
 
     private fun drawLabel(canvas: Canvas) {
 
-        paint.color = context.getColor(R.color.white)
+        paint.color = textColor
 
         val label = if (state != ButtonState.Completed) {
-            resources.getString(R.string.we_are_loading)
+           loadingText
         } else {
-            resources.getString(R.string.download)
+            loadCompleteText
         }
+
         canvas.drawText(label, width.toFloat() / 2, (height.toFloat() / 2f) + 44 / 3, paint)
 
 

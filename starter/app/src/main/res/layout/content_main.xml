@@ -59,9 +59,15 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_margin="@dimen/default_margin"
-
+        android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:loadCompleteText="@string/download"
+        app:loadingBarColor="@color/colorPrimaryDark"
+        app:loadingText="@string/we_are_loading"
+        app:animationDuration="5000"
+        app:progressCircleColor="@color/colorAccent"
+        app:textColor="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
