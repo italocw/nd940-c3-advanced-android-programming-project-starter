@@ -1,10 +1,8 @@
 package com.udacity
 
-import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -17,7 +15,6 @@ import android.os.Bundle
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -33,31 +30,38 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        radioGroup = findViewById(R.id.repository_radio_group)
+        loadingButton = findViewById(R.id.loading_button)
 
+        registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         createChannel(CHANNEL_ID, "DOWNLOADS")
 
-        radioGroup = findViewById(R.id.repository_radio_group)
-
         loading_button.setOnClickListener {
-            when (radioGroup.checkedRadioButtonId) {
-                R.id.radio_glide -> download(R.string.glide_radio_file_name, GLIDE)
-                R.id.radio_load_app -> download(R.string.load_app_file_name, LOAD_APP)
-                R.id.radio_retrofit -> download(R.string.retrofit_radio_file_name, RETROFIT)
+            if (isSomeRepositoryOptionChecked()) {
+                downloadSelectedRepository()
             }
         }
 
-        loadingButton = findViewById(R.id.loading_button)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (radioGroup.checkedRadioButtonId == -1) {
-            loadingButton.state = ButtonState.Loading
-            Toast.makeText(this, getString(R.string.select_the_file_file_name), Toast.LENGTH_LONG)
-                .show()
+        if (!isSomeRepositoryOptionChecked()) {
+            askUserToSelectARepository()
         }
     }
+
+    private fun downloadSelectedRepository() {
+        when (radioGroup.checkedRadioButtonId) {
+            R.id.radio_glide -> download(R.string.glide_radio_file_name, GLIDE)
+            R.id.radio_load_app -> download(R.string.load_app_file_name, LOAD_APP)
+            R.id.radio_retrofit -> download(R.string.retrofit_radio_file_name, RETROFIT)
+        }
+    }
+
+    private fun askUserToSelectARepository() {
+        loadingButton.state = ButtonState.Loading
+        Toast.makeText(this, getString(R.string.select_the_file_file_name), Toast.LENGTH_LONG)
+            .show()
+    }
+
+    private fun isSomeRepositoryOptionChecked() = radioGroup.checkedRadioButtonId != -1
 
     private fun createChannel(channelId: String, channelName: String) {
 
@@ -107,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                     val cursor: Cursor = manager.query(query)
                     if (cursor.moveToFirst()) {
                         if (cursor.count > 0) {
-                               sendNotification(
+                            sendNotification(
                                 cursor
                             )
                         }
