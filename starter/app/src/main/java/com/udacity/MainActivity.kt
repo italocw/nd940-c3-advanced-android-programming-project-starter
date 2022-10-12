@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var downloadID: Long = 0
+    private var enqueuedDownloadID: Long = 0
     private lateinit var loadingButton: LoadingButton
     private lateinit var radioGroup: RadioGroup
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         radioGroup = findViewById(R.id.repository_radio_group)
         loadingButton = findViewById(R.id.loading_button)
 
-        registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         createChannel(CHANNEL_ID, "DOWNLOADS")
 
         loading_button.setOnClickListener {
@@ -46,6 +45,17 @@ class MainActivity : AppCompatActivity() {
             askUserToSelectARepository()
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(receiver)
+    }
+
 
     private fun downloadSelectedRepository() {
         when (radioGroup.checkedRadioButtonId) {
@@ -101,19 +111,19 @@ class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            loadingButton.state = ButtonState.Completed
-            if (downloadID == id) {
+            if (enqueuedDownloadID == id) {
                 if (intent.action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
+                    loadingButton.state = ButtonState.Completed
+
                     val query = DownloadManager.Query()
                     query.setFilterById(intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0));
                     val manager =
                         context!!.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-                    val cursor: Cursor = manager.query(query)
-                    if (cursor.moveToFirst()) {
-                        if (cursor.count > 0) {
-                            sendNotification(
-                                cursor
-                            )
+                    val downloadManagerResult: Cursor = manager.query(query)
+
+                    if (downloadManagerResult.moveToFirst()) {
+                        if (downloadManagerResult.count > 0) {
+                            sendNotification(downloadManagerResult)
                         }
                     }
                 }
@@ -134,8 +144,7 @@ class MainActivity : AppCompatActivity() {
                 .setAllowedOverRoaming(true)
 
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-        downloadID =
-            downloadManager.enqueue(request)
+        enqueuedDownloadID =            downloadManager.enqueue(request)
         // enqueue puts the download request in the queue.
     }
 
